@@ -1,0 +1,186 @@
+from mininet.net import Mininet
+from mininet.node import Controller, RemoteController, OVSKernelSwitch, UserSwitch
+from mininet.cli import CLI
+from mininet.log import setLogLevel
+from mininet.link import Link, TCLink
+
+def topology():
+
+        print "*** Create a network."
+        net = Mininet( controller=RemoteController, link=TCLink, switch=OVSKernelSwitch )
+
+        print "*** Creating Hosts"
+        h1 = net.addHost( 'h1', ip="10.0.1.10/24", mac="00:00:00:00:00:01" )
+        h2 = net.addHost( 'h2', ip="10.0.1.20/24", mac="00:00:00:00:00:02" )
+        h3 = net.addHost( 'h3', ip="10.0.1.30/24", mac="00:00:00:00:00:03" )
+        h4 = net.addHost( 'h4', ip="10.0.1.40/24", mac="00:00:00:00:00:04" )
+        h5 = net.addHost( 'h5', ip="10.0.1.50/24", mac="00:00:00:00:00:05" )
+
+        h6 = net.addHost( 'h6', ip="10.0.2.10/24", mac="00:00:00:00:00:06" )
+        h7 = net.addHost( 'h7', ip="10.0.2.20/24", mac="00:00:00:00:00:07" )
+        h8 = net.addHost( 'h8', ip="10.0.2.30/24", mac="00:00:00:00:00:08" )
+        h9 = net.addHost( 'h9', ip="10.0.2.40/24", mac="00:00:00:00:00:09" )
+        h10 = net.addHost( 'h10', ip="10.0.2.50/24", mac="00:00:00:00:00:10" )
+
+        h11 = net.addHost( 'h11', ip="10.0.3.10/24", mac="00:00:00:00:00:11" )
+        h12 = net.addHost( 'h12', ip="10.0.3.20/24", mac="00:00:00:00:00:12" )
+        h13 = net.addHost( 'h13', ip="10.0.3.30/24", mac="00:00:00:00:00:13" )
+        h14 = net.addHost( 'h14', ip="10.0.3.40/24", mac="00:00:00:00:00:14" )
+        h15 = net.addHost( 'h15', ip="10.0.3.50/24", mac="00:00:00:00:00:15" )
+
+        h16 = net.addHost( 'h16', ip="10.0.4.10/24", mac="00:00:00:00:00:16" )
+        h17 = net.addHost( 'h17', ip="10.0.4.20/24", mac="00:00:00:00:00:17" )
+        h18 = net.addHost( 'h18', ip="10.0.4.30/24", mac="00:00:00:00:00:18" )
+        h19 = net.addHost( 'h19', ip="10.0.4.40/24", mac="00:00:00:00:00:19" )
+        h20 = net.addHost( 'h20', ip="10.0.4.50/24", mac="00:00:00:00:00:20" )
+
+        h21 = net.addHost( 'h21', ip="10.0.5.10/24", mac="00:00:00:00:00:21" )
+        h22 = net.addHost( 'h22', ip="10.0.5.20/24", mac="00:00:00:00:00:22" )
+        h23 = net.addHost( 'h23', ip="10.0.5.30/24", mac="00:00:00:00:00:23" )
+        h24 = net.addHost( 'h24', ip="10.0.5.40/24", mac="00:00:00:00:00:24" )
+        h25 = net.addHost( 'h25', ip="10.0.5.50/24", mac="00:00:00:00:00:25" )
+
+        r1 = net.addHost( 'r1')
+
+        print "*** Creating Switchs"
+        s1 = net.addSwitch( 's1')
+        s2 = net.addSwitch( 's2')
+        s3 = net.addSwitch( 's3')
+        s4 = net.addSwitch( 's4')
+        s5 = net.addSwitch( 's5')
+
+        print "*** Creating Controllers Openflow"
+        c0 = net.addController( 'c0', controller=RemoteController, ip='127.0.0.1', port=6633 )
+
+        print "*** Connecting hosts"
+        net.addLink( r1, s1 , delay='100ms')
+        net.addLink( r1, s2 , delay='200ms')
+        net.addLink( r1, s3 , delay='300ms')
+        net.addLink( r1, s4 , delay='400ms')
+        net.addLink( r1, s5 , delay='500ms')
+        net.addLink( h1, s1 )
+        net.addLink( h2, s1 )
+        net.addLink( h3, s1 )
+        net.addLink( h4, s1 )
+        net.addLink( h5, s1 )
+        net.addLink( h6, s2 )
+        net.addLink( h7, s2 )
+        net.addLink( h8, s2 )
+        net.addLink( h9, s2 )
+        net.addLink( h10, s2 )
+        net.addLink( h11, s3 )
+        net.addLink( h12, s3 )
+        net.addLink( h13, s3 )
+        net.addLink( h14, s3 )
+        net.addLink( h15, s3 )
+        net.addLink( h16, s4 )
+        net.addLink( h17, s4 )
+        net.addLink( h18, s4 )
+        net.addLink( h19, s4 )
+        net.addLink( h20, s4 )
+        net.addLink( h21, s5 )
+        net.addLink( h22, s5 )
+        net.addLink( h23, s5 )
+        net.addLink( h24, s5 )
+        net.addLink( h25, s5 )
+        net.build()
+
+        c0.start()
+        s1.start( [c0] )
+        s2.start( [c0] )
+        s3.start( [c0] )
+        s4.start( [c0] )
+        s5.start( [c0] )
+
+        r1.cmd("ifconfig r1-eth0 0")
+        r1.cmd("ifconfig r1-eth1 0")
+        r1.cmd("ifconfig r1-eth2 0")
+        r1.cmd("ifconfig r1-eth3 0")
+        r1.cmd("ifconfig r1-eth4 0")
+        r1.cmd("ifconfig r1-eth0 hw ether 00:00:00:00:01:01")
+        r1.cmd("ifconfig r1-eth1 hw ether 00:00:00:00:01:02")
+        r1.cmd("ifconfig r1-eth2 hw ether 00:00:00:00:01:03")
+        r1.cmd("ifconfig r1-eth3 hw ether 00:00:00:00:01:04")
+        r1.cmd("ifconfig r1-eth4 hw ether 00:00:00:00:01:05")
+        r1.cmd("ip addr add 10.0.1.1/24 brd + dev r1-eth0")
+        r1.cmd("ip addr add 10.0.2.1/24 brd + dev r1-eth1")
+        r1.cmd("ip addr add 10.0.3.1/24 brd + dev r1-eth2")
+        r1.cmd("ip addr add 10.0.4.1/24 brd + dev r1-eth3")
+        r1.cmd("ip addr add 10.0.5.1/24 brd + dev r1-eth4")
+        r1.cmd("echo 1 > /proc/sys/net/ipv4/ip_forward")
+
+        h1.cmd("ip route add default via 10.0.1.1")
+        h2.cmd("ip route add default via 10.0.1.1")
+        h3.cmd("ip route add default via 10.0.1.1")
+        h4.cmd("ip route add default via 10.0.1.1")
+        h5.cmd("ip route add default via 10.0.1.1")
+        h6.cmd("ip route add default via 10.0.2.1")
+        h7.cmd("ip route add default via 10.0.2.1")
+        h8.cmd("ip route add default via 10.0.2.1")
+        h9.cmd("ip route add default via 10.0.2.1")
+        h10.cmd("ip route add default via 10.0.2.1")
+        h11.cmd("ip route add default via 10.0.3.1")
+        h12.cmd("ip route add default via 10.0.3.1")
+        h13.cmd("ip route add default via 10.0.3.1")
+        h14.cmd("ip route add default via 10.0.3.1")
+        h15.cmd("ip route add default via 10.0.3.1")
+        h16.cmd("ip route add default via 10.0.4.1")
+        h17.cmd("ip route add default via 10.0.4.1")
+        h18.cmd("ip route add default via 10.0.4.1")
+        h19.cmd("ip route add default via 10.0.4.1")
+        h20.cmd("ip route add default via 10.0.4.1")
+        h21.cmd("ip route add default via 10.0.5.1")
+        h22.cmd("ip route add default via 10.0.5.1")
+        h23.cmd("ip route add default via 10.0.5.1")
+        h24.cmd("ip route add default via 10.0.5.1")
+        h25.cmd("ip route add default via 10.0.5.1")
+
+        s1.cmd("ovs-ofctl add-flow s1 priority=1,arp,actions=flood")
+        s1.cmd("ovs-ofctl add-flow s1 priority=65535,ip,dl_dst=00:00:00:00:01:01,actions=output:1")
+        s1.cmd("ovs-ofctl add-flow s1 priority=10,ip,nw_dst=10.0.1.10,actions=output:2")
+        s1.cmd("ovs-ofctl add-flow s1 priority=10,ip,nw_dst=10.0.1.20,actions=output:3")
+        s1.cmd("ovs-ofctl add-flow s1 priority=10,ip,nw_dst=10.0.1.30,actions=output:4")
+        s1.cmd("ovs-ofctl add-flow s1 priority=10,ip,nw_dst=10.0.1.40,actions=output:5")
+        s1.cmd("ovs-ofctl add-flow s1 priority=10,ip,nw_dst=10.0.1.50,actions=output:6")
+
+        s2.cmd("ovs-ofctl add-flow s2 priority=1,arp,actions=flood")
+        s2.cmd("ovs-ofctl add-flow s2 priority=65535,ip,dl_dst=00:00:00:00:01:02,actions=output:1")
+        s2.cmd("ovs-ofctl add-flow s2 priority=10,ip,nw_dst=10.0.2.10,actions=output:2")
+        s2.cmd("ovs-ofctl add-flow s2 priority=10,ip,nw_dst=10.0.2.20,actions=output:3")
+        s2.cmd("ovs-ofctl add-flow s2 priority=10,ip,nw_dst=10.0.2.30,actions=output:4")
+        s2.cmd("ovs-ofctl add-flow s2 priority=10,ip,nw_dst=10.0.2.40,actions=output:5")
+        s2.cmd("ovs-ofctl add-flow s2 priority=10,ip,nw_dst=10.0.2.50,actions=output:6")
+
+        s3.cmd("ovs-ofctl add-flow s3 priority=1,arp,actions=flood")
+        s3.cmd("ovs-ofctl add-flow s3 priority=65535,ip,dl_dst=00:00:00:00:01:03,actions=output:1")
+        s3.cmd("ovs-ofctl add-flow s3 priority=10,ip,nw_dst=10.0.3.10,actions=output:2")
+        s3.cmd("ovs-ofctl add-flow s3 priority=10,ip,nw_dst=10.0.3.20,actions=output:3")
+        s3.cmd("ovs-ofctl add-flow s3 priority=10,ip,nw_dst=10.0.3.30,actions=output:4")
+        s3.cmd("ovs-ofctl add-flow s3 priority=10,ip,nw_dst=10.0.3.40,actions=output:5")
+        s3.cmd("ovs-ofctl add-flow s3 priority=10,ip,nw_dst=10.0.3.50,actions=output:6")
+
+        s4.cmd("ovs-ofctl add-flow s4 priority=1,arp,actions=flood")
+        s4.cmd("ovs-ofctl add-flow s4 priority=65535,ip,dl_dst=00:00:00:00:01:04,actions=output:1")
+        s4.cmd("ovs-ofctl add-flow s4 priority=10,ip,nw_dst=10.0.4.10,actions=output:2")
+        s4.cmd("ovs-ofctl add-flow s4 priority=10,ip,nw_dst=10.0.4.20,actions=output:3")
+        s4.cmd("ovs-ofctl add-flow s4 priority=10,ip,nw_dst=10.0.4.30,actions=output:4")
+        s4.cmd("ovs-ofctl add-flow s4 priority=10,ip,nw_dst=10.0.4.40,actions=output:5")
+        s4.cmd("ovs-ofctl add-flow s4 priority=10,ip,nw_dst=10.0.4.50,actions=output:6")
+
+        s5.cmd("ovs-ofctl add-flow s5 priority=1,arp,actions=flood")
+        s5.cmd("ovs-ofctl add-flow s5 priority=65535,ip,dl_dst=00:00:00:00:01:05,actions=output:1")
+        s5.cmd("ovs-ofctl add-flow s5 priority=10,ip,nw_dst=10.0.5.10,actions=output:2")
+        s5.cmd("ovs-ofctl add-flow s5 priority=10,ip,nw_dst=10.0.5.20,actions=output:3")
+        s5.cmd("ovs-ofctl add-flow s5 priority=10,ip,nw_dst=10.0.5.30,actions=output:4")
+        s5.cmd("ovs-ofctl add-flow s5 priority=10,ip,nw_dst=10.0.5.40,actions=output:5")
+        s5.cmd("ovs-ofctl add-flow s5 priority=10,ip,nw_dst=10.0.5.50,actions=output:6")
+
+        print "*** Running CLI"
+        CLI( net )
+
+        print "*** Stopping network"
+        net.stop()
+
+if __name__ == '__main__':
+    setLogLevel( 'info' )
+    topology()
