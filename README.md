@@ -29,7 +29,7 @@ There are two ways to run the simulation of the network:
 ```
 $ sudo python network.py
 ```
-3. From this it only interacts with the system.
+2. From this it only interacts with the system.
 
 ## Built With
 
